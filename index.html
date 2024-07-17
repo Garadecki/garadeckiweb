@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Dark Background with Thinner Centered Curves</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0a0a;
+        }
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .curve {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Reduced border width back to 1px */
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1); /* Slightly reduced glow */
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.25; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+
+    <script>
+        const background = document.getElementById('background');
+        const numCurves = 5;
+
+        for (let i = 0; i < numCurves; i++) {
+            const curve = document.createElement('div');
+            curve.classList.add('curve');
+            const size = 50 + i * 20; // Increase size for each curve
+            curve.style.width = `${size}vw`;
+            curve.style.height = `${size / 2}vw`;
+            curve.style.animation = `pulse ${8 + i * 2}s infinite ease-in-out`;
+            curve.style.opacity = 0.18 - (i * 0.02); // Slightly adjusted base opacity
+            background.appendChild(curve);
+        }
+
+        function createStar() {
+            const star = document.createElement('div');
+            star.style.position = 'absolute';
+            star.style.width = '2px';
+            star.style.height = '2px';
+            star.style.background = 'white';
+            star.style.borderRadius = '50%';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.opacity = Math.random() * 0.5 + 0.1;
+            star.style.animation = `twinkle ${Math.random() * 5 + 5}s infinite alternate`;
+            background.appendChild(star);
+        }
+
+        for (let i = 0; i < 20; i++) {
+            createStar();
+        }
+    </script>
+</body>
+</html>
