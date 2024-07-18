@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Dark Background with Centered Video Player</title>
+    <title>Animated Space Background with Video Player</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             overflow: hidden;
-            background-color: #0a0a0a;
+            background-color: #000;
+            background-image: radial-gradient(circle, rgba(38, 36, 36, 0.95) 0%, rgba(0, 0, 0, 1) 100%);
+            /* Radial gradient background */
         }
         #background {
             position: fixed;
@@ -18,80 +20,106 @@
             left: 0;
             width: 100%;
             height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
-        .curve {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+        .rectangle {
+            position: relative;
+            width: 800px; /* Adjust width of the rectangular container */
+            height: 450px; /* Adjust height of the rectangular container */
+            background-color: rgba(0, 0, 0, 0.8); /* Adjust background color */
+            border: 2px solid rgba(255, 255, 255, 0.4); /* Adjust border properties */
+            border-radius: 20px; /* Rounded corners */
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* Adjust box-shadow properties */
+            overflow: hidden;
+            z-index: 1; /* Ensure the rectangle is above stars */
         }
         #videoContainer {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 40vw;
-            height: 40vw;
-            border-radius: 50%;
-            overflow: hidden;
-            z-index: 10;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px; /* Rounded corners */
+            z-index: 2; /* Ensure video player is above stars */
         }
         #videoPlayer {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            border: none;
         }
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
-            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.25; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite alternate;
+        }
+        .star.large {
+            width: 4px;
+            height: 4px;
         }
         @keyframes twinkle {
             0% { opacity: 0.2; }
             100% { opacity: 0.8; }
         }
+        /* Additional space elements can be added here */
     </style>
 </head>
 <body>
-    <div id="background"></div>
-    <div id="videoContainer">
-        <video id="videoPlayer" loop muted>
-            <source src="vid.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    <div id="background">
+        <div class="rectangle">
+            <div id="videoContainer">
+                <iframe id="videoPlayer" src="https://www.youtube.com/embed/hY8C3cIMR4o?autoplay=1&controls=0&loop=1&modestbranding=1&rel=0&showinfo=0&disablekb=1" frameborder="0" allow="autoplay; fullscreen;"></iframe>
+            </div>
+        </div>
+        <!-- Stars -->
+        <script>
+            const background = document.getElementById('background');
+            const rectangle = document.querySelector('.rectangle');
+            const videoContainer = document.getElementById('videoContainer');
+            const numStars = 50; // Increase the number of stars
+            
+            // Calculate the boundaries of the video container
+            const rect = videoContainer.getBoundingClientRect();
+            const videoLeft = rect.left + window.scrollX;
+            const videoTop = rect.top + window.scrollY;
+            const videoRight = videoLeft + rect.width;
+            const videoBottom = videoTop + rect.height;
+            
+            // Function to create stars, avoiding the video player area
+            for (let i = 0; i < numStars; i++) {
+                createStar();
+            }
+            
+            function createStar() {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                if (Math.random() > 0.5) {
+                    star.classList.add('large'); // Randomly make some stars larger
+                }
+                
+                let starLeft, starTop;
+                
+                // Ensure stars are not generated within the video player area
+                do {
+                    starLeft = Math.random() * 100;
+                    starTop = Math.random() * 100;
+                } while (
+                    starLeft > videoLeft &&
+                    starLeft < videoRight &&
+                    starTop > videoTop &&
+                    starTop < videoBottom
+                );
+                
+                star.style.left = `${starLeft}%`;
+                star.style.top = `${starTop}%`;
+                star.style.opacity = Math.random() * 0.6 + 0.2; // Random opacity between 0.2 and 0.8
+                background.appendChild(star);
+            }
+        </script>
+        <!-- Additional space elements can be added here -->
     </div>
-    <script>
-        const background = document.getElementById('background');
-        const numCurves = 5;
-        for (let i = 0; i < numCurves; i++) {
-            const curve = document.createElement('div');
-            curve.classList.add('curve');
-            const size = 50 + i * 20;
-            curve.style.width = `${size}vw`;
-            curve.style.height = `${size / 2}vw`;
-            curve.style.animation = `pulse ${8 + i * 2}s infinite ease-in-out`;
-            curve.style.opacity = 0.18 - (i * 0.02);
-            background.appendChild(curve);
-        }
-        function createStar() {
-            const star = document.createElement('div');
-            star.style.position = 'absolute';
-            star.style.width = '2px';
-            star.style.height = '2px';
-            star.style.background = 'white';
-            star.style.borderRadius = '50%';
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            star.style.opacity = Math.random() * 0.5 + 0.1;
-            star.style.animation = `twinkle ${Math.random() * 5 + 5}s infinite alternate`;
-            background.appendChild(star);
-        }
-        for (let i = 0; i < 20; i++) {
-            createStar();
-        }
-    </script>
 </body>
 </html>
