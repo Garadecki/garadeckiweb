@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Dark Background with Thinner Centered Curves</title>
+    <title>Animated Dark Background with Centered Video Player</title>
     <style>
         body, html {
             margin: 0;
@@ -25,8 +25,24 @@
             top: 50%;
             transform: translate(-50%, -50%);
             border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Reduced border width back to 1px */
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1); /* Slightly reduced glow */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+        }
+        #videoContainer {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 10;
+        }
+        #videoPlayer {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         @keyframes pulse {
             0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
@@ -41,6 +57,12 @@
 </head>
 <body>
     <div id="background"></div>
+    <div id="videoContainer">
+        <video id="videoPlayer" autoplay loop muted>
+            <source src="https://vimeo.com/524933864" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
 
     <script>
         const background = document.getElementById('background');
@@ -49,11 +71,11 @@
         for (let i = 0; i < numCurves; i++) {
             const curve = document.createElement('div');
             curve.classList.add('curve');
-            const size = 50 + i * 20; // Increase size for each curve
+            const size = 50 + i * 20;
             curve.style.width = `${size}vw`;
             curve.style.height = `${size / 2}vw`;
             curve.style.animation = `pulse ${8 + i * 2}s infinite ease-in-out`;
-            curve.style.opacity = 0.18 - (i * 0.02); // Slightly adjusted base opacity
+            curve.style.opacity = 0.18 - (i * 0.02);
             background.appendChild(curve);
         }
 
