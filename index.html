@@ -59,15 +59,13 @@
     <div id="background"></div>
     <div id="videoContainer">
         <video id="videoPlayer" autoplay loop muted>
-            <source src="https://vimeo.com/524933864" type="video/mp4">
+            <source src="https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
-
     <script>
         const background = document.getElementById('background');
         const numCurves = 5;
-
         for (let i = 0; i < numCurves; i++) {
             const curve = document.createElement('div');
             curve.classList.add('curve');
@@ -78,7 +76,6 @@
             curve.style.opacity = 0.18 - (i * 0.02);
             background.appendChild(curve);
         }
-
         function createStar() {
             const star = document.createElement('div');
             star.style.position = 'absolute';
@@ -92,7 +89,6 @@
             star.style.animation = `twinkle ${Math.random() * 5 + 5}s infinite alternate`;
             background.appendChild(star);
         }
-
         for (let i = 0; i < 20; i++) {
             createStar();
         }
